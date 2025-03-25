@@ -6,9 +6,7 @@ Here, for understanding, lets create a new android studio project named ViewMode
 create a new viewModel class and name it as MainActivityViewModel and extend the ViewModel class. In order to run a coroutine in this view model, we need a coroutine scope. Let’s assume, 
 we want to launch the coroutine in a background thread ie Dispathers.IO. Then, will create a function getUserData(). Inside this function, we will launch the coroutine. 
 
-In android, everytime a viewmodel is cleared from the memory, just before the clearing, viewmodel invokes its onCleared() method. onCleared() method is always there by default, but, if we 
-want to do something just before the clearing, we can manually override the onCleared method. Some of the coroutines we launch in a viewmodel, has a potential to run even after the view 
- model is cleared from the memory. It might run until our app is terminated. In some scenarios that would be the intention but if that's not what we intended, app will end up leaking 
+In android, everytime a viewmodel is cleared from the memory, just before the clearing, viewmodel invokes its onCleared() method. onCleared() method is always there by default, but, if we want to do something just before the clearing, we can manually override the onCleared method. Some of the coroutines we launch in a viewmodel, has a potential to run even after the viewmodel is cleared from the memory. It might run until our app is terminated. In some scenarios that would be the intention but if that's not what we intended, app will end up leaking
 memory. To avoid that, we need to cancel the coroutine within the onCleared funciton. 
 
 ![image](https://github.com/user-attachments/assets/98e44d95-d6e2-45ed-a90f-1715f231a439)
@@ -27,9 +25,21 @@ override onCleared as clearing will be done automatically.
 A ViewModelScope is defined for each ViewModel in our app. Any coroutine launched in this scope will be automatically canceled if the ViewModel is cleared. This kind of coroutines are 
 useful when you have work that needs to be done only if the ViewModel is active. 
 
-Let's get some user data from the repository to an activity through the viewmodel. Instead of displaying them in a recycleview, let’s just log the values. So let’s create a new data class 
-called User and it will have an int id and a String name. Let's a new class for the Repository and code a getter method to get a list of user instances. In a similar real world situation,
-this can be a call to a rest api and get users from it or get a list of users from a local database. 
+Let's get some user data from the repository to an activity through the viewmodel. Instead of displaying them in a recycleview, let’s just log the values. So let’s create a new data class called User and it will have an int id and a String name.
+
+![image](https://github.com/user-attachments/assets/86edf76a-34fd-4f7c-908f-4d89535b49ef)
+
+Let's create a new class for the Repository and code a getter method to get a list of user instances. In a similar real world situation, this can be a call to a rest api and get users from it or get a list of users from a local database. 
+
+![image](https://github.com/user-attachments/assets/2a82a62e-0a62-4aca-b20f-a9490cc30cb7)
 
 For the demonstration lets create a new list of objects and return them. Let’s create a suspending functioncalled getUsers which will return a list of users. To mimic a long running task,
 add a delay for 5 seconds. Now, we can create a list of users and we will return the list of users.In the view model class, create a new repository instance.
+
+![image](https://github.com/user-attachments/assets/27ac96b6-30f8-481f-9f26-bedea1fed82e)
+
+![image](https://github.com/user-attachments/assets/86f0bec4-66fb-4e4c-811d-4164d4296944)
+
+Lets execute and check the logs for the output
+
+![image](https://github.com/user-attachments/assets/501f3ab1-72db-4ef6-b7e8-39223772c643)
